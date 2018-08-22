@@ -51,7 +51,9 @@ final class ViewController: UIViewController {
         rangeSliderCustom.leftHandleImage = #imageLiteral(resourceName: "custom-handle")
         rangeSliderCustom.rightHandleImage = #imageLiteral(resourceName: "custom-handle")
         rangeSliderCustom.selectedHandleDiameterMultiplier = 1.0
+        rangeSliderCustom.colorBeforeLeftHandle = .yellow
         rangeSliderCustom.colorBetweenHandles = .red
+        rangeSliderCustom.colorAfterRightHandle = .blue
         rangeSliderCustom.lineHeight = 10.0
         rangeSliderCustom.numberFormatter.positivePrefix = "$"
         rangeSliderCustom.numberFormatter.positiveSuffix = "M"

@@ -135,7 +135,9 @@ import UIKit
     @IBInspectable open var handleBorderColor: UIColor?
 
     /// Set slider line tint color between handles
+    @IBInspectable open var colorBeforeLeftHandle: UIColor?
     @IBInspectable open var colorBetweenHandles: UIColor?
+    @IBInspectable open var colorAfterRightHandle: UIColor?
 
     /// The color of the entire slider when the handle is set to the minimum value and the maximum value. Default is nil.
     @IBInspectable open var initialColor: UIColor?
@@ -239,8 +241,11 @@ import UIKit
     private var handleTracking: HandleTracking = .none
 
     private let sliderLine: CALayer = CALayer()
+    
+    private let sliderLineBeforeLeftHandle: CALayer = CALayer()
     private let sliderLineBetweenHandles: CALayer = CALayer()
-
+    private let sliderLineAfterRightHandle: CALayer = CALayer()
+    
     private let leftHandle: CALayer = CALayer()
     private let rightHandle: CALayer = CALayer()
 
@@ -405,7 +410,9 @@ import UIKit
         layer.addSublayer(sliderLine)
 
         // draw the track distline
+        layer.addSublayer(sliderLineBeforeLeftHandle)
         layer.addSublayer(sliderLineBetweenHandles)
+        layer.addSublayer(sliderLineAfterRightHandle)
 
         // draw the minimum slider handle
         leftHandle.cornerRadius = handleDiameter / 2.0
@@ -480,7 +487,9 @@ import UIKit
                                   width: lineRightSide.x - lineLeftSide.x,
                                   height: lineHeight)
         sliderLine.cornerRadius = lineHeight / 2.0
+        sliderLineBeforeLeftHandle.cornerRadius = sliderLine.cornerRadius
         sliderLineBetweenHandles.cornerRadius = sliderLine.cornerRadius
+        sliderLineAfterRightHandle.cornerRadius = sliderLine.cornerRadius
     }
 
     private func updateLabelValues() {
@@ -513,7 +522,11 @@ import UIKit
         if let initialColor = initialColor?.cgColor, isInitial {
             minLabel.foregroundColor = initialColor
             maxLabel.foregroundColor = initialColor
+            
+            sliderLineBeforeLeftHandle.backgroundColor = initialColor
             sliderLineBetweenHandles.backgroundColor = initialColor
+            sliderLineAfterRightHandle.backgroundColor = initialColor
+            
             sliderLine.backgroundColor = initialColor
 
             let leftColor: CGColor = (leftHandleImage == nil) ? initialColor : UIColor.clear.cgColor
@@ -527,7 +540,9 @@ import UIKit
             let tintCGColor: CGColor = tintColor.cgColor
             minLabel.foregroundColor = minLabelColor?.cgColor ?? tintCGColor
             maxLabel.foregroundColor = maxLabelColor?.cgColor ?? tintCGColor
+            sliderLineBeforeLeftHandle.backgroundColor = colorBeforeLeftHandle?.cgColor ?? tintCGColor
             sliderLineBetweenHandles.backgroundColor = colorBetweenHandles?.cgColor ?? tintCGColor
+            sliderLineAfterRightHandle.backgroundColor = colorAfterRightHandle?.cgColor ?? tintCGColor
             sliderLine.backgroundColor = tintCGColor
 
             let leftColor: CGColor = (leftHandleImage == nil) ? (handleColor?.cgColor ?? tintCGColor) : UIColor.clear.cgColor
@@ -552,9 +567,17 @@ import UIKit
                                        y: sliderLine.frame.midY)
 
         // positioning for the dist slider line
+        sliderLineBeforeLeftHandle.frame = CGRect(x: sliderLine.frame.minX,
+                                                y: sliderLine.frame.minY,
+                                                width: leftHandle.position.x,
+                                                height: lineHeight)
         sliderLineBetweenHandles.frame = CGRect(x: leftHandle.position.x,
                                                 y: sliderLine.frame.minY,
                                                 width: rightHandle.position.x - leftHandle.position.x,
+                                                height: lineHeight)
+        sliderLineAfterRightHandle.frame = CGRect(x: rightHandle.position.x,
+                                                y: sliderLine.frame.minY,
+                                                width: sliderLine.frame.maxX - rightHandle.position.x,
                                                 height: lineHeight)
     }
     
