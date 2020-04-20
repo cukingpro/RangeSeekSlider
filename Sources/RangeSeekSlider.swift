@@ -240,7 +240,7 @@ import UIKit
     private enum HandleTracking { case none, left, right }
     private var handleTracking: HandleTracking = .none
 
-    private let sliderLine: CALayer = CALayer()
+    private let sliderLine: CAGradientLayer = CAGradientLayer()
     
     private let sliderLineBeforeLeftHandle: CALayer = CALayer()
     private let sliderLineBetweenHandles: CALayer = CALayer()
@@ -407,6 +407,8 @@ import UIKit
         accessibleElements = [leftHandleAccessibilityElement, rightHandleAccessibilityElement]
 
         // draw the slider line
+        sliderLine.startPoint = CGPoint(x: 0, y: 0.5)
+        sliderLine.endPoint = CGPoint(x: 1, y: 0.5)
         layer.addSublayer(sliderLine)
 
         // draw the track distline
@@ -527,7 +529,11 @@ import UIKit
             sliderLineBetweenHandles.backgroundColor = initialColor
             sliderLineAfterRightHandle.backgroundColor = initialColor
             
-            sliderLine.backgroundColor = initialColor
+            sliderLine.colors = [UIColor.blue.cgColor,
+                                 UIColor.green.cgColor,
+                                 UIColor.yellow.cgColor,
+                                 UIColor.orange.cgColor,
+                                 UIColor.red.cgColor]
 
             let leftColor: CGColor = (leftHandleImage == nil) ? initialColor : UIColor.clear.cgColor
             leftHandle.backgroundColor = leftColor
@@ -541,9 +547,13 @@ import UIKit
             minLabel.foregroundColor = minLabelColor?.cgColor ?? tintCGColor
             maxLabel.foregroundColor = maxLabelColor?.cgColor ?? tintCGColor
             sliderLineBeforeLeftHandle.backgroundColor = colorBeforeLeftHandle?.cgColor ?? tintCGColor
-            sliderLineBetweenHandles.backgroundColor = colorBetweenHandles?.cgColor ?? tintCGColor
+            sliderLineBetweenHandles.backgroundColor = colorBetweenHandles?.cgColor
             sliderLineAfterRightHandle.backgroundColor = colorAfterRightHandle?.cgColor ?? tintCGColor
-            sliderLine.backgroundColor = tintCGColor
+            sliderLine.colors = [UIColor.blue.cgColor,
+                                 UIColor.green.cgColor,
+                                 UIColor.yellow.cgColor,
+                                 UIColor.orange.cgColor,
+                                 UIColor.red.cgColor]
 
             let leftColor: CGColor = (leftHandleImage == nil) ? (handleColor?.cgColor ?? tintCGColor) : UIColor.clear.cgColor
             leftHandle.backgroundColor = leftColor
