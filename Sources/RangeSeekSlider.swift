@@ -135,7 +135,7 @@ import UIKit
     @IBInspectable open var handleBorderColor: UIColor?
 
     /// Set slider line tint color between handles
-    @IBInspectable open var colorBetweenHandles: UIColor?
+    @IBInspectable open var colorBetweenHandles: [UIColor]?
 
     /// The color of the entire slider when the handle is set to the minimum value and the maximum value. Default is nil.
     @IBInspectable open var initialColor: UIColor?
@@ -239,7 +239,7 @@ import UIKit
     private var handleTracking: HandleTracking = .none
 
     private let sliderLine: CALayer = CALayer()
-    private let sliderLineBetweenHandles: CALayer = CALayer()
+    private let sliderLineBetweenHandles: CAGradientLayer = CAGradientLayer()
 
     private let leftHandle: CALayer = CALayer()
     private let rightHandle: CALayer = CALayer()
@@ -405,6 +405,8 @@ import UIKit
         layer.addSublayer(sliderLine)
 
         // draw the track distline
+        sliderLineBetweenHandles.startPoint = CGPoint(x: 0, y: 0.5)
+        sliderLineBetweenHandles.endPoint = CGPoint(x: 1, y: 0.5)
         layer.addSublayer(sliderLineBetweenHandles)
 
         // draw the minimum slider handle
@@ -527,7 +529,11 @@ import UIKit
             let tintCGColor: CGColor = tintColor.cgColor
             minLabel.foregroundColor = minLabelColor?.cgColor ?? tintCGColor
             maxLabel.foregroundColor = maxLabelColor?.cgColor ?? tintCGColor
-            sliderLineBetweenHandles.backgroundColor = colorBetweenHandles?.cgColor ?? tintCGColor
+            if let colorBetweenHandles = colorBetweenHandles {
+                sliderLineBetweenHandles.colors = colorBetweenHandles.map({ $0.cgColor })
+            } else {
+                sliderLineBetweenHandles.backgroundColor = tintCGColor
+            }
             sliderLine.backgroundColor = tintCGColor
 
             let leftColor: CGColor = (leftHandleImage == nil) ? (handleColor?.cgColor ?? tintCGColor) : UIColor.clear.cgColor
